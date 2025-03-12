@@ -1,5 +1,12 @@
 from fastapi import APIRouter
+from models.blog_model import Blog
+
+
 router = APIRouter()
+
+@router.post("/blogs")
+async def create_blog(blog: Blog): # blog is the instance of Blog acting as a request body and will be validated by Pydantic
+  return{"blog": blog}
 
 @router.get("/blogs")
 async def read_blogs(year: int=None): # year is an optional query parameter 
