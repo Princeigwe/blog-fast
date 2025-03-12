@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from models.blog_model import Blog
 from api_responses.blog_response import BlogResponse
 
@@ -8,6 +8,11 @@ router = APIRouter()
 @router.post("/blogs")
 async def create_blog(blog: Blog): # blog is the instance of Blog acting as a request body and will be validated by Pydantic
   return{"blog": blog}
+
+
+@router.get("/blogs/error")
+async def read_blogs_error():
+  raise HTTPException(status_code=404, detail="Resource not found")
 
 @router.get("/blogs", response_model=list[BlogResponse])
 async def read_blogs(year: int=None): 
@@ -23,6 +28,10 @@ async def read_blogs(year: int=None):
 
     year is an optional query parameter 
   '''
+  # raising an HTTPException with status code 404 and detail "Resource not found" if the year is greater than 2025
+  if year and year > 2025:
+    raise HTTPException(status_code=404, detail="Resource not found")
+  
   if year: # if year is provided, return a list of articles from that year
     return [
       {
