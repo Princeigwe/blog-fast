@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from models.blog_model import Blog
+from api_responses.blog_response import BlogResponse
 
 
 router = APIRouter()
@@ -8,8 +9,20 @@ router = APIRouter()
 async def create_blog(blog: Blog): # blog is the instance of Blog acting as a request body and will be validated by Pydantic
   return{"blog": blog}
 
-@router.get("/blogs")
-async def read_blogs(year: int=None): # year is an optional query parameter 
+@router.get("/blogs", response_model=list[BlogResponse])
+async def read_blogs(year: int=None): 
+  '''
+    The API response here has been customized with "list[BlogResponse]" to return
+    a list of blogs with the years excluded.
+
+    The read_blogs function returns a list of articles. The
+    function accepts an optional year parameter. If the year
+    parameter is provided, the function returns a list of
+    articles from that year. If the year parameter is not
+    provided, the function returns a list of all articles.
+
+    year is an optional query parameter 
+  '''
   if year: # if year is provided, return a list of articles from that year
     return [
       {
