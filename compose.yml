@@ -1,0 +1,27 @@
+#Local AWS setup with Localstack
+
+version: '3'
+
+services:
+
+  api:
+    build: .
+    container_name: blog-fastapi
+    ports:
+      - "8000:8000"
+    
+  localstack:
+    container_name: localstack-aws
+    image: localstack/localstack
+    ports:
+      - "4566-4599:4566-4599"
+    environment:
+      - DEBUG=1
+      - AWS_ACCESS_KEY_ID=test_access_key
+      - AWS_SECRET_ACCESS_KEY=test_secret_key
+    volumes:
+      - "./.localstack:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+
+# to see the service available docker-compose exec localstack awslocal list-services
