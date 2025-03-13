@@ -45,3 +45,13 @@ async def update_user_by_id(user_id: int, body: UserDto, db: Session = Depends(g
   db.commit()
   db.refresh(existing_user)
   return existing_user
+
+
+async def delete_user_by_id(user_id: int,  db: Session = Depends(get_db)):
+  existing_user = db.query(User).filter(User.id == user_id).first()
+  if existing_user is None:
+    raise HTTPException(status_code=404, detail="User does not exist")
+  
+  db.delete(existing_user)
+  db.commit()
+  return {"message": "User deleted"}

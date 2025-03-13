@@ -22,3 +22,7 @@ async def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
 @router.patch("/users/{user_id}")
 async def update_user_by_id(user_id: int, body: UserDto, db: Session = Depends(get_db)):
   return await users_service.update_user_by_id(user_id, body, db)
+
+@router.delete("/users/{user_id}")
+async def delete_user_by_id(user_id: int, db: Session = Depends(get_db)):
+  return await users_service.delete_user_by_id(user_id, db)
