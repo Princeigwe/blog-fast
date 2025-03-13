@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException
-from models.blog_model import Blog
+from dtos.blog_dto import BlogDto
 from api_responses.blog_response import BlogResponse
 
 
 router = APIRouter()
 
 @router.post("/blogs")
-async def create_blog(blog: Blog): # blog is the instance of Blog acting as a request body and will be validated by Pydantic
+async def create_blog(blog: BlogDto): # blog is the instance of Blog acting as a request body and will be validated by Pydantic
   return{"blog": blog}
 
 
