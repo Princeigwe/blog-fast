@@ -2,7 +2,11 @@ from routers import blogs_router, users_router, file_upload_router
 from fastapi import FastAPI
 from database_config import Base, engine, SessionLocal
 
-app = FastAPI()
+app = FastAPI(
+  title="BlogFast",
+  description="A simple blog API with FastAPI",
+  version="0.1"
+)
 
 Base.metadata.create_all(engine) # create the tables in the database
 
