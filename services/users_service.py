@@ -3,6 +3,8 @@ from database_config import get_db
 from fastapi import Depends, HTTPException
 from dtos.user_dto import UserDto
 from models.user_model import User
+from email_validator import validate_email, EmailNotValidError
+from utils.jwt_encode_decode import decode_access_token
 
 
 async def create_user(body:UserDto, db: Session = Depends(get_db)):
@@ -12,7 +14,7 @@ async def create_user(body:UserDto, db: Session = Depends(get_db)):
   if existing_user_with_email or existing_user_with_username:
     raise HTTPException(status_code=400, detail="User with email or username already exists")
   
-  new_user = User(email=body.email, username=body.username)
+  new_user = User(email=body.email, username=body.username, password=body.password)
   db.add(new_user)
   db.commit()
   db.refresh(new_user)
@@ -55,3 +57,19 @@ async def delete_user_by_id(user_id: int,  db: Session = Depends(get_db)):
   db.delete(existing_user)
   db.commit()
   return {"message": "User deleted"}
+
+
+async def get_user_by_username_or_email(username_or_email: str, db: Session = Depends(get_db)):
+  try:
+    validate_email(username_or_email)
+    query_filter = User.email
+  except EmailNotValidError:
+    query_filter = User.username
+  user = db.query(User).filter(query_filter == username_or_email).first()
+  return user
+
+
+async def my_profile(token: str, db: Session = Depends(get_db)):
+  decoded_token = await decode_access_token(token)
+  user = db.query(User).filter(User.username == decoded_token['sub']).first()
+  return user
