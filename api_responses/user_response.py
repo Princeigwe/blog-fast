@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class UserResponse(BaseModel):
+  id: int
   email: str
   username: str
   # password was not included in order to hide it

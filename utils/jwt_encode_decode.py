@@ -16,7 +16,6 @@ ACCESS_TOKEN_EXPIRE_DAYS = 1
 async def create_access_token(payload: dict):
   payload["exp"] = expiry_time
   token = jwt.encode(payload, SECRET_KEY, ALGORITHM)
-  # token = jwt.encode(payload, "dgfg", ALGORITHM)
   return token
 
 

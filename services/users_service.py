@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException
 from dtos.user_dto import UserDto
 from models.user_model import User
 from email_validator import validate_email, EmailNotValidError
+from utils.jwt_encode_decode import decode_access_token
 
 
 async def create_user(body:UserDto, db: Session = Depends(get_db)):
@@ -65,4 +66,10 @@ async def get_user_by_username_or_email(username_or_email: str, db: Session = De
   except EmailNotValidError:
     query_filter = User.username
   user = db.query(User).filter(query_filter == username_or_email).first()
+  return user
+
+
+async def my_profile(token: str, db: Session = Depends(get_db)):
+  decoded_token = await decode_access_token(token)
+  user = db.query(User).filter(User.username == decoded_token['sub']).first()
   return user
