@@ -12,7 +12,7 @@ async def create_user(body:UserDto, db: Session = Depends(get_db)):
   if existing_user_with_email or existing_user_with_username:
     raise HTTPException(status_code=400, detail="User with email or username already exists")
   
-  new_user = User(email=body.email, username=body.username)
+  new_user = User(email=body.email, username=body.username, password=body.password)
   db.add(new_user)
   db.commit()
   db.refresh(new_user)

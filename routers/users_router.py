@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from dtos.user_dto import UserDto
 from services import users_service
 from database_config import get_db
+from api_responses.user_response import UserResponse
 
 router = APIRouter()
 
@@ -11,7 +12,7 @@ router = APIRouter()
 async def create_user(body: UserDto, db: Session = Depends(get_db)):
   return await users_service.create_user(body, db)
 
-@router.get("/users")
+@router.get("/users", response_model=list[UserResponse])
 async def get_users(db: Session = Depends(get_db)):
   return await users_service.get_users(db)
 
