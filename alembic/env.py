@@ -4,9 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
 import os
 from dotenv  import load_dotenv
 from database_config import Base
+from models.user_model import User
 
 load_dotenv()
 

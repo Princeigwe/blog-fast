@@ -6,3 +6,4 @@ class UserDto(BaseModel):
   username: str = Field(..., max_length=50)
   password: str = Field(..., max_length=50)
   role: Role = Field(default=Role.customer)
+  location: str = Field(default="Lagos, Nigeria")
