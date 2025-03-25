@@ -29,6 +29,19 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+  
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: blogfast_pgadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin-password
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 
 
   # localstack:
@@ -47,5 +60,6 @@ services:
 
 volumes:
   pgdata:
+  pgadmin-data:
 
 # to see the service available docker-compose exec localstack awslocal list-services
