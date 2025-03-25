@@ -9,19 +9,43 @@ services:
     container_name: blog-fastapi
     ports:
       - "8000:8000"
-    
-  localstack:
-    container_name: localstack-aws
-    image: localstack/localstack
-    ports:
-      - "4566-4599:4566-4599"
-    environment:
-      - DEBUG=1
-      - AWS_ACCESS_KEY_ID=test_access_key
-      - AWS_SECRET_ACCESS_KEY=test_secret_key
+    env_file:
+      - .env
     volumes:
-      - "./.localstack:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - .:/code
+  
 
+  postgres-database:
+    container_name: api_db
+    image: postgres:13.4-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+  # localstack:
+  #   container_name: localstack-aws
+  #   image: localstack/localstack
+  #   ports:
+  #     - "4566-4599:4566-4599"
+  #   environment:
+  #     - DEBUG=1
+  #     - AWS_ACCESS_KEY_ID=test_access_key
+  #     - AWS_SECRET_ACCESS_KEY=test_secret_key
+  #   volumes:
+  #     - "./.localstack:/var/lib/localstack"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+
+
+volumes:
+  pgdata:
 
 # to see the service available docker-compose exec localstack awslocal list-services
