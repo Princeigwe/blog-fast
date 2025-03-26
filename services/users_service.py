@@ -12,7 +12,7 @@ async def create_user(body:UserDto, db: Session = Depends(get_db)):
   existing_user_with_email = db.query(User).filter(User.email==body.email).first()
   existing_user_with_username = db.query(User).filter(User.username==body.username).first()
   if existing_user_with_email or existing_user_with_username:
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User with email or username already exists")
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with email or username already exists")
   
   new_user = User(email=body.email, username=body.username, password=body.password, role=body.role, location=body.location)
   db.add(new_user)
