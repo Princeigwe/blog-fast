@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from dtos.blog_dto import BlogDto
 from api_responses.blog_response import BlogResponse
 
@@ -12,7 +12,7 @@ async def create_blog(blog: BlogDto): # blog is the instance of Blog acting as a
 
 @router.get("/blogs/error")
 async def read_blogs_error():
-  raise HTTPException(status_code=404, detail="Resource not found")
+  raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
 
 @router.get("/blogs", response_model=list[BlogResponse])
 async def read_blogs(year: int=None): 
@@ -30,7 +30,7 @@ async def read_blogs(year: int=None):
   '''
   # raising an HTTPException with status code 404 and detail "Resource not found" if the year is greater than 2025
   if year and year > 2025:
-    raise HTTPException(status_code=404, detail="Resource not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
   
   if year: # if year is provided, return a list of articles from that year
     return [

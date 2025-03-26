@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import jwt
 from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta, timezone
+from fastapi import HTTPException, status
 
 load_dotenv()
 
@@ -25,4 +26,4 @@ async def decode_access_token(token):
     decoded_data = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=[ALGORITHM])
     return decoded_data
   except InvalidTokenError as e:
-    raise Exception( f"Invalid  token: {e}" )
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")

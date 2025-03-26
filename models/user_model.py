@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Enum, text
 from database_config import Base
+from enums.roles_enums import Role
 
 class User(Base):
   __tablename__ = 'user'
@@ -7,3 +8,5 @@ class User(Base):
   email = Column(String, unique=True, index=True)
   username = Column(String, unique=True, index=True)
   password = Column(String)
+  role = Column(Enum(Role), default=Role.customer)
+  location = Column(String, default="Lagos, Nigeria")

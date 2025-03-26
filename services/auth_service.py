@@ -1,7 +1,7 @@
 from . import users_service
 from database_config import get_db
 from dtos.user_dto import UserDto
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from services import users_service
@@ -24,7 +24,7 @@ async def authenticate_user(username_or_email: str, password: str, db: Session):
 
   # if user does not exist or password decryption is incorrect
   if not user or not cipher.verify(password, user.password):
-    raise HTTPException(status_code=403, detail="Invalid credentials")
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials")
   payload = {
     "sub": user.username
   }
