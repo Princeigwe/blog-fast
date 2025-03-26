@@ -9,4 +9,4 @@ class User(Base):
   username = Column(String, unique=True, index=True)
   password = Column(String)
   role = Column(Enum(Role), default=Role.customer)
-  location = Column(String, server_default=text("Lagos, Nigeria"), nullable=False)
+  location = Column(String, default="Lagos, Nigeria")
