@@ -3,7 +3,8 @@ from routers import (
   users_router, 
   file_upload_router,
   auth_router,
-  admin_dashboaard_router
+  admin_dashboaard_router,
+  article_router
   )
 from fastapi import FastAPI
 from database_config import Base, engine, SessionLocal
@@ -21,6 +22,7 @@ app.include_router(users_router.router)
 app.include_router(file_upload_router.router)
 app.include_router(auth_router.router)
 app.include_router(admin_dashboaard_router.router)
+app.include_router(article_router.router)
 
 @app.get("/")
 async def read_root():
