@@ -43,11 +43,9 @@ async def edit_article(token: str, article_id: int, title: str=None, content: st
   elif existing_article.author_id != current_user.id:
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized to modify article")
   
-  if title | content:
-    existing_article.title = title
-    existing_article.content = content
+  existing_article.title = title if title else existing_article.title
+  existing_article.content = content if content else existing_article.content
     
-    db.commit()
-    db.refresh(existing_article)
-    return existing_article
+  db.commit()
+  db.refresh(existing_article)
   return existing_article

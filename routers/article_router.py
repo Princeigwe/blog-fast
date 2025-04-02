@@ -27,3 +27,7 @@ async def get_articles(token: str= Depends(oauth2_scheme), db: Session = Depends
   else:
     print("Admin user")
     return await article_service.get_articles(db)
+
+@router.patch("/articles/{article_id}")
+async def edit_article(article_id: int, body: ArticleDto, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+  return await article_service.edit_article(token, article_id, body.title, body.content, db)
