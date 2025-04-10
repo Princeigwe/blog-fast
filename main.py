@@ -7,13 +7,21 @@ from routers import (
   article_router
   )
 from fastapi import FastAPI
-from database_config import Base, engine, SessionLocal
+from database_config import Base, engine
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from utils.rate_limiter import limiter
+
+
 
 app = FastAPI(
   title="BlogFast",
   description="A simple blog API with FastAPI",
   version="0.1"
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 Base.metadata.create_all(engine) # create the tables in the database
 

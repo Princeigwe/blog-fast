@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 from dtos.blog_dto import BlogDto
 from api_responses.blog_response import BlogResponse
+from fastapi import Request
+from utils.rate_limiter import limiter
 
 
 router = APIRouter()
@@ -15,7 +17,8 @@ async def read_blogs_error():
   raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
 
 @router.get("/blogs", response_model=list[BlogResponse])
-async def read_blogs(year: int=None): 
+@limiter.limit("5/minute")
+async def read_blogs(request: Request, year: int=None): 
   '''
     The API response here has been customized with "list[BlogResponse]" to return
     a list of blogs with the years excluded.
